@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
+
+	controller "github.com/harshit3011/MovieStreamer/Server/MovieStreamerServer/controllers"
 )
 
 func main() {
@@ -13,6 +15,8 @@ func main() {
 	router.GET("/hello", func(ctx *gin.Context) {
 		ctx.String(200, "Hello My movie streamer!")
 	})
+
+	router.GET("/movies", controller.GetMovies())
 
 	port := os.Getenv("PORT")
 	if port == "" {
