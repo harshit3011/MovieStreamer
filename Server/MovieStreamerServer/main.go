@@ -5,9 +5,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-
-	controller "github.com/harshit3011/MovieStreamer/Server/MovieStreamerServer/controllers"
-
+	"github.com/harshit3011/MovieStreamer/Server/MovieStreamerServer/routes"
 )
 
 func main() {
@@ -17,10 +15,8 @@ func main() {
 		ctx.String(200, "Hello My movie streamer!")
 	})
 
-	router.GET("/movies", controller.GetMovies())
-	router.GET("/movie/:imdb_id", controller.GetMovie())
-	router.POST("/addMovie", controller.AddMovie())
-	router.POST("/register",controller.RegisterUser())
+	routes.SetupProtectedRoutes(router)
+	routes.SetupUnProtectedRoutes(router)
 
 	port := os.Getenv("PORT")
 	if port == "" {
