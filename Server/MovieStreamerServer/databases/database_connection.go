@@ -1,28 +1,28 @@
 package databases
 
-import(
+import (
 	"fmt"
 	"log"
 	"os"
+
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
-
-func Connect() *mongo.Client{
-	err:= godotenv.Load(".env")
+func Connect() *mongo.Client {
+	err := godotenv.Load(".env")
 
 	if err != nil {
 		log.Println("Warning: unable to find a .env file")
 	}
 
-	mongoDB_uri:=os.Getenv("MONGODB_URI")
+	mongoDBURI := os.Getenv("MONGODB_URI")
 
-	if mongoDB_uri==""{
+	if mongoDBURI == "" {
 		log.Fatal("MONGODB_URI not set!")
 	}
-	clientOptions:= options.Client().ApplyURI(mongoDB_uri)
+	clientOptions := options.Client().ApplyURI(mongoDBURI)
 
 	client, err := mongo.Connect(clientOptions)
 
@@ -33,7 +33,7 @@ func Connect() *mongo.Client{
 	return client
 }
 
-var Client *mongo.Client = Connect()
+var Client *mongo.Client
 
 func OpenCollection(collectionName string, client *mongo.Client) *mongo.Collection {
 
@@ -46,7 +46,7 @@ func OpenCollection(collectionName string, client *mongo.Client) *mongo.Collecti
 
 	fmt.Println("DATABASE_NAME: ", databaseName)
 
-	collection := Client.Database(databaseName).Collection(collectionName)
+	collection := client.Database(databaseName).Collection(collectionName)
 
 	if collection == nil {
 		return nil
